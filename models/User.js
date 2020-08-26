@@ -6,21 +6,29 @@ const userSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        required: true,
+        required: [true, 'Username is required'],
+        unique: true,
     },
     name: {
         type: String,
+        required: [true, 'Please enter your name. This will be displayed on your profile'],
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Email is required'],
         trim: true,
-        lowercase: true
+        lowercase: true,
+        unique: true,
     },
     password: {
         type: String,
-        required: true,
-        minlength: 4
+        required: [true, 'Password is required'],
+        minlength: 4,
+        unique: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
 }, {timestamps: true});
 

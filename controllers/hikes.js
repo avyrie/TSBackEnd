@@ -18,6 +18,7 @@ const show = (req, res) => {
 
 const create = (req, res) => {
   db.Hike.create(req.body, (err, savedHike) => {
+      console.log(`This is a saved hike: `, savedHike)
     if (err) console.log('Error in hikes create:', err);
 
     res.status(200).json(savedHike);

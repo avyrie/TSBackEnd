@@ -26,11 +26,15 @@ const hikeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    completed: {
+        type: Boolean,
+        // required: true,
+    },
     rating: {
         type: Number,
     },
     review: {
-        type: String
+        type: String,
     },
 });
 
