@@ -18,5 +18,6 @@ app.use(cors({
   // API routes
   app.use('/api/hikes', routes.hikes);
   app.use('/api/auth', routes.auth);
+  app.use('/api/users', routes.users);
   // Port
   app.listen(port, () => console.log(`Server is running on port ${port}`));

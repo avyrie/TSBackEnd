@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     },
     hikes: [
         {
-            id: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Hike"
         }
     ]

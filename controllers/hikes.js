@@ -45,7 +45,6 @@ const destroy = (req, res) => {
   });
 };
 
-
 module.exports = {
     index,
     show,
