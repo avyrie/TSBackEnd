@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const jwt = require("jwt-decode");
+const jwt = require('jsonwebtoken');
 const db = require('../models');
 
 
@@ -14,7 +14,7 @@ const signup = async (req, res) => {
 
   try {
     const foundUser = await db.User.findOne({ email: req.body.email });
-
+    // Send an error is email is already in use
     if (foundUser) {
       res.status(400).json({
         status: 400,
@@ -22,35 +22,37 @@ const signup = async (req, res) => {
       });
     }
 
+    // Creates salt for hash
     const salt = await bcrypt.genSalt(10);
+    // Hashes user password
     const hash = await bcrypt.hash(req.body.password, salt);
-    await db.User.create({ ...req.body, password: hash });
-
-    const payload = {id: foundUser._id};
+    // Creates a user with a hashed password
+    const newUser = await db.User.create({ ...req.body, password: hash });
+    console.log(`This is newUSer: `, newUser)
+    const payload = {id: newUser._id};
     const secret = process.env.JWT_SECRET;
     const expiration = {expiresIn: "1h"};
   
-    // SIGN TOKEN
+    // Sign token
     const token = await jwt.sign(payload, secret, expiration);
 
-    // success
+    // Success
     return res.status(201).json({status: 201, message: "success"});
   } catch (error) {
-    console.log(error);
+    console.log(`Sign up error: `, error);
     return res.status(500).json({
       status: 500,
       message: "Something went wrong. Please try again",
     });
   }
-  
-
 };
 
-// login
+
+// LOGIN
 const login = async (req, res) => {
-  console.log(req.body);
+  console.log(`This is the req.body: `, req.body);
   try {
-    const foundUser = await db.User.findOne({ username: req.body.username });
+    const foundUser = await db.User.findOne({ email: req.body.email });
 
     if (!foundUser) {
       return res.status(400).json({
@@ -67,18 +69,18 @@ const login = async (req, res) => {
       });
     }
 
-    // CREATE TOKEN PAYLOAD
+    // Create token payload
     const payload = {id: foundUser._id};
     const secret = process.env.JWT_SECRET;
     const expiration = {expiresIn: "1h"};
     
-    // SIGN TOKEN
-    // const token = await jwt.sign(payload, secret, expiration);
+    // Sign token
+    const token = await jwt.sign(payload, secret, expiration);
 
-    // success
+    // Success
     res.status(200).json({token});
   } catch (error) {
-    console.log(error);
+    console.log(`Login Error: `, error);
     return res.status(500).json({
       status: 500,
       message: "Something went wrong. Please try again",
@@ -87,14 +89,14 @@ const login = async (req, res) => {
 };
 
 
-// REGISTER CONTROLLER
+// Sign Up controller
 const verify = async (req, res) => {
-  // GET TOKEN FROM REQUEST HEADER
+  // Get token from request header
   const token = req.headers['authorization'];
-  console.log(req.headers)
+  console.log(`re.headers in verify: `, req.headers)
   console.log('Verify Token ---> ', token);
 
-  // VERIFY TOKEN
+  // verify token
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedUser) => {
     if (err || !decodedUser) {
       return res.status(401).json({
@@ -102,7 +104,7 @@ const verify = async (req, res) => {
       });
     }
 
-    // payload
+    // add payload to req object
     req.currentUser = decodedUser;
     const payload = {id: foundUser._id};
     const secret = process.env.JWT_SECRET;

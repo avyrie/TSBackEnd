@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    hikes: [
+        {
+            id: mongoose.Schema.Types.ObjectId,
+            ref: "Hike"
+        }
+    ]
 }, {timestamps: true});
 
 const User = mongoose.model('User', userSchema);

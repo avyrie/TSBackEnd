@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const ctrl = require('../controllers');
-const authReq = require('../middleware/authReq');
+const authRequired = require('../middleware/authReq');
 
 // Routes
 router.get('/', ctrl.hikes.index);
-router.put('/:id', ctrl.hikes.update);
+router.put('/:id', authRequired, ctrl.hikes.update);
 router.get('/:id', ctrl.hikes.show);
-router.post('/', ctrl.hikes.create);
-router.delete('/:id', ctrl.hikes.destroy);
+router.post('/', authRequired, ctrl.hikes.create);
+router.delete('/:id', authRequired, ctrl.hikes.destroy);
 
 // exports
 module.exports = router;

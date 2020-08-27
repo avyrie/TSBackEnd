@@ -28,7 +28,7 @@ const hikeSchema = new mongoose.Schema({
     },
     completed: {
         type: Boolean,
-        // required: true,
+        required: true,
     },
     rating: {
         type: Number,
