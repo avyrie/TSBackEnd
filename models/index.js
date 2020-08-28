@@ -7,7 +7,7 @@ mongoose.connect(MONGODB_URI, {
     useCreateIndex: true,
     useFindAndModify: false
 })
-    .then(() => console.log(`MongoDB connected successfully. MONGO DB = `, process.env.MONGODB_URI))
+    .then(() => console.log(`MongoDB connected successfully.`))
     .catch((err) => console.log(`MongoDB connection error: ${err}`));
 
 module.exports = {
