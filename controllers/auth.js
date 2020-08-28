@@ -28,7 +28,7 @@ const signup = async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, salt);
     // Creates a user with a hashed password
     const newUser = await db.User.create({ ...req.body, password: hash });
-    console.log(`This is newUSer: `, newUser)
+    console.log(`This is newUser: `, newUser)
     const payload = {id: newUser._id};
     const secret = process.env.JWT_SECRET;
     const expiration = {expiresIn: "1h"};
@@ -78,7 +78,7 @@ const login = async (req, res) => {
     const token = await jwt.sign(payload, secret, expiration);
 
     // Success
-    res.status(200).json({token});
+    res.status(200).json({"token": token, "id": foundUser._id});
   } catch (error) {
     console.log(`Login Error: `, error);
     return res.status(500).json({

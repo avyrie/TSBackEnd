@@ -28,6 +28,7 @@ const show = (req, res) => {
                 data: foundUser,
                 error: [{ message: `Error in users show: ${err}`}]
             });
+            console.log(`This is foundUser: `, foundUser)
             return res.status(200).json({
                 status: 200,
                 data: foundUser,
@@ -35,15 +36,6 @@ const show = (req, res) => {
             })
         });
 };
-
-// const show = (req, res) => {
-//     db.User.findById(req.params.id, (err, foundUser) => {
-//       if (err) console.log('Error in users show', err);
-  
-//       res.status(200).send(foundUser);
-//     });
-//   };
-
 
 const update = (req, res) => {
     // req.body.free_plan = false

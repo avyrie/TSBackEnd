@@ -36,6 +36,10 @@ const hikeSchema = new mongoose.Schema({
     review: {
         type: String,
     },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }
 });
 
 const Hike = mongoose.model('Hike', hikeSchema);
