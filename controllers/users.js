@@ -38,7 +38,6 @@ const show = (req, res) => {
 };
 
 const update = (req, res) => {
-    // req.body.free_plan = false
     db.User.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, updatedUser) => {
     if (err) return res.status(500).json({
         status: 500,
@@ -62,7 +61,6 @@ const destroy = (req, res) => {
         status: 500,
         error: [{message: `Error in user destroy: ${err}`}]
     });
-
     res.json({
         status: 200,
         count: 1,
@@ -71,7 +69,6 @@ const destroy = (req, res) => {
     });
   });
 };
-
 
 module.exports = {
     show,

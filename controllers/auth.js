@@ -2,16 +2,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../models');
 
-
 const signup = async (req, res) => {
   if (!req.body.username || !req.body.email || !req.body.password) {
     return res.status(400).json({message: 'All fields are required. Please try again'});
   }
-
   if (req.body.password.length < 4) {
     return res.status(400).json({message: 'Password must be at least 4 characters long'});
   }
-
   try {
     const foundUser = await db.User.findOne({ email: req.body.email });
     // Send an error is email is already in use
@@ -21,7 +18,6 @@ const signup = async (req, res) => {
         message: "Email address has already been registered. Please try again",
       });
     }
-
     // Creates salt for hash
     const salt = await bcrypt.genSalt(10);
     // Hashes user password
@@ -32,10 +28,8 @@ const signup = async (req, res) => {
     const payload = {id: newUser._id};
     const secret = process.env.JWT_SECRET;
     const expiration = {expiresIn: "1h"};
-  
     // Sign token
     const token = await jwt.sign(payload, secret, expiration);
-
     // Success
     return res.status(201).json({status: 201, message: "success"});
   } catch (error) {
@@ -46,7 +40,6 @@ const signup = async (req, res) => {
     });
   }
 };
-
 
 // LOGIN
 const login = async (req, res) => {
@@ -60,7 +53,6 @@ const login = async (req, res) => {
         message: "Username or password is incorrect"
       });
     }
-
     const isMatch = await bcrypt.compare(req.body.password, foundUser.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -68,15 +60,12 @@ const login = async (req, res) => {
         message: "Username or password is incorrect",
       });
     }
-
     // Create token payload
     const payload = {id: foundUser._id};
     const secret = process.env.JWT_SECRET;
     const expiration = {expiresIn: "1h"};
-    
     // Sign token
     const token = await jwt.sign(payload, secret, expiration);
-
     // Success
     res.status(200).json({"token": token, "id": foundUser._id});
   } catch (error) {
@@ -88,23 +77,20 @@ const login = async (req, res) => {
   }
 };
 
-
 // Sign Up controller
 const verify = async (req, res) => {
   // Get token from request header
   const token = req.headers['authorization'];
   console.log(`re.headers in verify: `, req.headers)
   console.log('Verify Token ---> ', token);
-
-  // verify token
+  // Verify token
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedUser) => {
     if (err || !decodedUser) {
       return res.status(401).json({
         message: 'You are not authorized. Please login and try again'
       });
     }
-
-    // add payload to req object
+    // Add payload to req object
     req.currentUser = decodedUser;
     const payload = {id: foundUser._id};
     const secret = process.env.JWT_SECRET;
@@ -112,11 +98,9 @@ const verify = async (req, res) => {
     // const token = await jwt.sign(payload, secret, expiration);
     // success
     res.status(200).json({user: decodedUser});
-
     // next();
   });
 };
-
 
 module.exports = {
   signup,
