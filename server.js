@@ -3,11 +3,11 @@ const cors = require('cors');
 require('dotenv').config();
 const routes = require('./routes');
 const jwt = require('jsonwebtoken')
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors({
-    origin: [`http://localhost:3000`],
+    origin: [`https://hiking-stamp.herokuapp.com/`],
     methods: "GET,POST,PUT,DELETE",
     optionsSuccessStatus: 200 
   }));
