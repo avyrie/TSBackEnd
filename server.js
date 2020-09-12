@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors({
-    origin: [`https://hiking-stamp.herokuapp.com/`],
+    origin: [`https://hiking-stamp.herokuapp.com`],
     methods: "GET,POST,PUT,DELETE",
     optionsSuccessStatus: 200 
   }));
